@@ -1,22 +1,38 @@
 import { useState } from "react";
 
-const NoteFormComponent = () => {
-  const [formData, setFormData] = useState({
+const NoteFormComponent = ({ notes, setNotes }) => {
+  const defaults = {
     title: "",
     priority: "Low",
     category: "Ideas",
     description: "",
-  });
+  };
+  const [formData, setFormData] = useState(defaults);
 
-  const ochFormData = () => (e) =>
+  const handleChange = () => (e) =>
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
 
+  const handleSubmit = () => (e) => {
+    e.preventDefault();
+
+    if (!formData.title || !formData.description) return;
+
+    const note = {
+      id: Date.now(),
+      ...formData,
+    };
+
+    setNotes([note, ...notes]);
+
+    setFormData(defaults);
+  };
+
   return (
     <>
-      <form action="" className="mb-6">
+      <form className="mb-6" onSubmit={handleSubmit()}>
         <div className="mb-4">
           <label htmlFor="title" className="block font-semibold">
             Title
@@ -26,7 +42,7 @@ const NoteFormComponent = () => {
             type="text"
             className="w-full p-2 border rounded-lg"
             value={formData.title}
-            onChange={ochFormData()}
+            onChange={handleChange()}
           />
         </div>
         <div className="mb-4">
@@ -38,7 +54,7 @@ const NoteFormComponent = () => {
             type="text"
             className="w-full p-2 border rounded-lg"
             value={formData.priority}
-            onChange={ochFormData()}
+            onChange={handleChange()}
           >
             <option value="Low" id="low">
               🟢 Low
@@ -60,7 +76,7 @@ const NoteFormComponent = () => {
             type="text"
             className="w-full p-2 border rounded-lg"
             value={formData.category}
-            onChange={ochFormData()}
+            onChange={handleChange()}
           >
             <option value="Ideas" id="ideas">
               💡 Ideas
@@ -82,7 +98,7 @@ const NoteFormComponent = () => {
             type="text"
             className="w-full p-2 border rounded-lg"
             value={formData.description}
-            onChange={ochFormData()}
+            onChange={handleChange()}
           />
         </div>
         <button className="w-full bg-blue-500 text-white py-2 rounded-lg cursor-pointer hover:bg-blue-600">

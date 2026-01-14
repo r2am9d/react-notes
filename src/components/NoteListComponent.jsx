@@ -1,4 +1,4 @@
-const NoteListComponent = ({ notes }) => {
+const NoteListComponent = ({ notes, onClick }) => {
   if (notes.length == 0) {
     return <p className="text-center text-gray-500">No Notes Yet</p>;
   }
@@ -19,6 +19,12 @@ const NoteListComponent = ({ notes }) => {
               <strong>Category: </strong> {n.category}
             </p>
             <p className="mt-2">{n.description}</p>
+            <button
+              onClick={onClick(n.id)}
+              className="mt-2 text-red-500 cursor-pointer transition hover:text-red-700"
+            >
+              🗑️ Delete
+            </button>
           </div>
         ))}
       </div>
